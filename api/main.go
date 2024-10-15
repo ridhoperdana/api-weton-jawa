@@ -43,8 +43,17 @@ type WetonData struct {
 	Pasaran string `json:"pasaran"`
 }
 
+// SetCORS adds CORS headers to the response
+func SetCORS(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")    // Allow all origins
+	w.Header().Set("Access-Control-Allow-Methods", "GET") // Allow GET method
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+}
+
 // GetWetonHandler handles the /weton/{tanggal-masehi} endpoint
 func GetWetonHandler(w http.ResponseWriter, r *http.Request) {
+	// Add CORS headers
+	SetCORS(w)
 	// Extract the date from the URL path
 	tanggal := strings.TrimPrefix(r.URL.Path, "/api/weton/")
 	tanggal = strings.TrimSpace(tanggal)
