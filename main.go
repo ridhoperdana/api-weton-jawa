@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"strings"
 	"time"
 )
 
-// Map of weekdays in English to Indonesian
 var indonesianWeekdays = map[string]string{
 	"Sunday":    "Minggu",
 	"Monday":    "Senin",
@@ -29,36 +31,56 @@ func GetPasaran(t time.Time) string {
 	return pasaran[pasaranIndex]
 }
 
-// IsWithinRange checks if a date is within the range of 1990-2000.
-func IsWithinRange(t time.Time) bool {
-	startDate := time.Date(1990, 1, 1, 0, 0, 0, 0, time.UTC)
-	endDate := time.Date(2000, 12, 31, 23, 59, 59, 0, time.UTC)
-	return t.After(startDate) && t.Before(endDate)
+// WetonResponse represents the structure of the response
+type WetonResponse struct {
+	Data     WetonData `json:"data"`
+	Metadata struct{}  `json:"metadata"`
 }
 
-func main() {
-	// Input the date you want to convert in DD-MM-YYYY format
-	inputDate := "30-04-1995" // Example: 30 April 1995
+// WetonData holds the day and pasaran information
+type WetonData struct {
+	Hari    string `json:"hari"`
+	Pasaran string `json:"pasaran"`
+}
+
+// GetWetonHandler handles the /weton/{tanggal-masehi} endpoint
+func GetWetonHandler(w http.ResponseWriter, r *http.Request) {
+	// Extract the date from the URL path
+	tanggal := strings.TrimPrefix(r.URL.Path, "/api/weton/")
+	tanggal = strings.TrimSpace(tanggal)
+
+	// Parse the input date in dd-mm-yyyy format
 	layout := "02-01-2006"
-	date, err := time.Parse(layout, inputDate)
-
+	date, err := time.Parse(layout, tanggal)
 	if err != nil {
-		fmt.Println("Invalid date format. Use DD-MM-YYYY.")
+		http.Error(w, "Invalid date format. Use DD-MM-YYYY.", http.StatusBadRequest)
 		return
 	}
 
-	// Check if the date is within 1990-2000
-	if !IsWithinRange(date) {
-		fmt.Println("Date is out of range. Please input a date between 1990 and 2000.")
-		return
-	}
+	// Get the day in Indonesian
+	gregorianDay := indonesianWeekdays[date.Weekday().String()]
 
 	// Get the Pasaran day
 	pasaranDay := GetPasaran(date)
 
-	// Get the day of the week in Indonesian
-	gregorianDay := indonesianWeekdays[date.Weekday().String()]
+	// Create the response
+	response := WetonResponse{
+		Data: WetonData{
+			Hari:    gregorianDay,
+			Pasaran: pasaranDay,
+		},
+	}
 
-	// Output the Javanese calendar conversion in DD-MM-YYYY format
-	fmt.Printf("Hari jawa kamu adalah: %s %s\n", gregorianDay, pasaranDay)
+	// Set response headers and return JSON response
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+func main() {
+	// Define the route handler
+	http.HandleFunc("/api/weton/", GetWetonHandler)
+
+	// Start the server on port 8080
+	fmt.Println("Server is running on port 8080...")
+	http.ListenAndServe(":8080", nil)
 }
