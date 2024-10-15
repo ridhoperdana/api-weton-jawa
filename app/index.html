@@ -38,6 +38,18 @@
             font-size: 16px;
         }
 
+        input[type="date"] {
+            width: 70%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+            height: 44px; /* Add height to match the button */
+            vertical-align: middle; /* Align with button */
+        }
+
         button {
             padding: 10px 20px;
             border: none;
@@ -46,6 +58,8 @@
             color: white;
             font-size: 16px;
             cursor: pointer;
+            height: 44px; /* Same height as input */
+            vertical-align: middle; /* Align with input */
         }
 
         button:hover {
@@ -69,8 +83,8 @@
 <body>
 <div class="container">
     <h2>Cari Weton Anda</h2>
-    <input type="text" id="inputDate" placeholder="Masukkan Tanggal (DD-MM-YYYY)">
-    <button onclick="searchWeton()">Search</button>
+    <input type="date" id="inputDate">
+    <button onclick="searchWeton()">Cari</button>
 
     <div class="result" id="result">
         <!-- Result will be displayed here -->

@@ -3,19 +3,22 @@ function searchWeton() {
     // Get the input value
     const inputDate = document.getElementById('inputDate').value;
 
-    // Validate date input (DD-MM-YYYY format)
-    const datePattern = /^\d{2}-\d{2}-\d{4}$/;
-    if (!datePattern.test(inputDate)) {
-        document.getElementById('result').innerHTML = "<p class='error'>Format tanggal tidak valid. Gunakan format DD-MM-YYYY.</p>";
+    // Validate if the input is not empty
+    if (!inputDate) {
+        document.getElementById('result').innerHTML = "<p class='error'>Pilih tanggal terlebih dahulu.</p>";
         return;
     }
+
+    // Convert from YYYY-MM-DD to DD-MM-YYYY
+    const [year, month, day] = inputDate.split("-");
+    const formattedDate = `${day}-${month}-${year}`;
 
     // Clear previous results
     document.getElementById('result').innerHTML = '';
 
     // Make the AJAX request
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://localhost:8080/api/weton/${inputDate}`, true);
+    xhr.open("GET", `http://localhost:8080/api/weton/${formattedDate}`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Parse the JSON response
