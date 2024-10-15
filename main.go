@@ -60,6 +60,5 @@ func main() {
 	gregorianDay := indonesianWeekdays[date.Weekday().String()]
 
 	// Output the Javanese calendar conversion in DD-MM-YYYY format
-	fmt.Printf("Tanggal Masehi: %s adalah hari %s\n", date.Format("02-01-2006"), gregorianDay)
-	fmt.Printf("Pasaran Jawa untuk %s adalah: %s\n", date.Format("02-01-2006"), pasaranDay)
+	fmt.Printf("Hari jawa kamu adalah: %s %s\n", gregorianDay, pasaranDay)
 }
