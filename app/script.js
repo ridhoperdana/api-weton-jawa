@@ -1,3 +1,20 @@
+// Fungsi untuk navigasi antar menu
+function showMenu() {
+    document.getElementById('menu').style.display = 'block';
+    document.getElementById('pasaran-menu').style.display = 'none';
+    document.getElementById('jodoh-menu').style.display = 'none';
+}
+
+function showPasaranMenu() {
+    document.getElementById('menu').style.display = 'none';
+    document.getElementById('pasaran-menu').style.display = 'block';
+}
+
+function showJodohMenu() {
+    document.getElementById('menu').style.display = 'none';
+    document.getElementById('jodoh-menu').style.display = 'block';
+}
+
 // script.js
 function searchWeton() {
     // Get the input value
