@@ -156,6 +156,8 @@ func parseDate(dateStr string) (time.Time, error) {
 
 // Fungsi API untuk mencocokkan weton jodoh
 func GetWetonJodohHandler(w http.ResponseWriter, r *http.Request) {
+	// Add CORS headers
+	SetCORS(w)
 	pria := r.URL.Query().Get("pria")
 	wanita := r.URL.Query().Get("wanita")
 
@@ -203,7 +205,7 @@ func GetWetonJodohHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	// Define the route handler
 	http.HandleFunc("/api/weton/", GetWetonHandler)
-	http.HandleFunc("/api/weton-jodoh", GetWetonJodohHandler)
+	http.HandleFunc("/api/jodoh", GetWetonJodohHandler)
 
 	// Start the server on port 8080
 	fmt.Println("Server is running on port 7723...")

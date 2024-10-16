@@ -3,94 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weton Calculator</title>
+    <title>Weton App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f5f5f5;
         }
 
         .container {
-            background-color: #ffffff;
+            max-width: 400px;
+            margin: 50px auto;
             padding: 20px;
+            background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
-        h2 {
-            color: #333;
-        }
-
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        input[type="date"] {
-            width: 70%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-            height: 44px; /* Add height to match the button */
-            vertical-align: middle; /* Align with button */
-        }
-
-        button {
+        .btn {
+            display: inline-block;
             padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
             border: none;
             border-radius: 5px;
-            background-color: #5cb85c;
-            color: white;
-            font-size: 16px;
             cursor: pointer;
-            height: 44px; /* Same height as input */
-            vertical-align: middle; /* Align with input */
         }
 
-        button:hover {
-            background-color: #4cae4c;
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         .result {
             margin-top: 20px;
-        }
-
-        .result p {
             font-size: 18px;
-            margin: 5px 0;
-        }
-
-        .error {
-            color: red;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>Cari Weton Anda</h2>
-    <input type="date" id="inputDate">
-    <button onclick="searchWeton()">Cari</button>
 
-    <div class="result" id="result">
-        <!-- Result will be displayed here -->
-    </div>
+<div class="container" id="menu">
+    <h2>Menu Utama</h2>
+    <button class="btn" onclick="showPasaranMenu()">Cari Pasaran</button>
+    <button class="btn" onclick="showJodohMenu()">Cek Kecocokan Jodoh</button>
 </div>
 
+<div class="container" id="pasaran-menu" style="display: none;">
+    <h2>Cari Weton Anda</h2>
+    <input type="date" id="inputDate" class="input-field">
+    <button class="btn" onclick="searchWeton()">Cari</button>
+    <div class="result" id="result"></div>
+    <button class="btn" onclick="showMenu()">Kembali</button>
+</div>
+
+<div class="container" id="jodoh-menu" style="display: none;">
+    <h2>Cek Kecocokan Jodoh</h2>
+    <input type="date" id="pria-date" class="input-field" placeholder="Tanggal lahir pria">
+    <input type="date" id="wanita-date" class="input-field" placeholder="Tanggal lahir wanita">
+    <button class="btn" onclick="checkMatchValue()">Cek Kecocokan</button>
+    <div class="result" id="jodoh-result"></div>
+    <button class="btn" onclick="showMenu()">Kembali</button>
+</div>
+
+<script>
+    // Fungsi untuk navigasi antar menu
+    function showMenu() {
+        document.getElementById('menu').style.display = 'block';
+        document.getElementById('pasaran-menu').style.display = 'none';
+        document.getElementById('jodoh-menu').style.display = 'none';
+    }
+
+    function showPasaranMenu() {
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('pasaran-menu').style.display = 'block';
+    }
+
+    function showJodohMenu() {
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('jodoh-menu').style.display = 'block';
+    }
+</script>
 <script src="script.js"></script>
 </body>
 </html>
