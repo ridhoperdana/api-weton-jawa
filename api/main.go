@@ -38,6 +38,51 @@ var neptuPasaran = map[string]int{
 
 var pasaran = []string{"Legi", "Pahing", "Pon", "Wage", "Kliwon"}
 
+// Hitung Neptu Weton
+func hitungNeptu(hari string, pasaran string) int {
+	return neptuHari[hari] + neptuPasaran[pasaran]
+}
+
+func coupleMatchResult(neptu1, neptu2 int) string {
+	totalNeptu := neptu1 + neptu2
+
+	neptuCategory := map[int]string{
+		9:  "Cocok sekali, hubungan harmonis.",
+		10: "Kurang harmonis, tetapi bisa diatasi dengan pengertian.",
+		12: "Hubungan baik, tetapi perlu perhatian lebih.",
+		8:  "Kurang cocok, sering ada salah paham.",
+		18: "Kurang cocok, sering ada salah paham.",
+		19: "Cocok sekali, hubungan harmonis.",
+		20: "Kurang harmonis, tetapi bisa diatasi dengan pengertian.",
+		22: "Hubungan baik, tetapi perlu perhatian lebih.",
+	}
+
+	if result, exists := neptuCategory[totalNeptu]; exists {
+		return result
+	}
+
+	// Jika tidak ada, cari neptu terdekat
+	nearestNeptu := 0
+	closestDiff := int(^uint(0) >> 1) // Nilai besar untuk inisialisasi
+	for k := range neptuCategory {
+		diff := abs(totalNeptu - k)
+		if diff < closestDiff {
+			closestDiff = diff
+			nearestNeptu = k
+		}
+	}
+
+	return fmt.Sprintf("Mendekati neptuCategory dengan neptu %d: %s", nearestNeptu, neptuCategory[nearestNeptu])
+}
+
+// Fungsi untuk menghitung selisih absolut (abs)
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
 // GetPasaran calculates the Javanese "pasaran" day for a given Gregorian date.
 func GetPasaran(t time.Time) string {
 	// Reference date: 1 January 1893 was a "Kliwon"
@@ -103,11 +148,64 @@ func GetWetonHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// Fungsi untuk mengubah input string menjadi struct time
+func parseDate(dateStr string) (time.Time, error) {
+	layout := "02-01-2006"
+	return time.Parse(layout, dateStr)
+}
+
+// Fungsi API untuk mencocokkan weton jodoh
+func GetWetonJodohHandler(w http.ResponseWriter, r *http.Request) {
+	pria := r.URL.Query().Get("pria")
+	wanita := r.URL.Query().Get("wanita")
+
+	if pria == "" || wanita == "" {
+		http.Error(w, "Parameter 'pria' dan 'wanita' harus diisi", http.StatusBadRequest)
+		return
+	}
+
+	tanggalPria, err := parseDate(pria)
+	if err != nil {
+		http.Error(w, "Format tanggal pria tidak valid. Gunakan dd-mm-yyyy", http.StatusBadRequest)
+		return
+	}
+
+	tanggalWanita, err := parseDate(wanita)
+	if err != nil {
+		http.Error(w, "Format tanggal wanita tidak valid. Gunakan dd-mm-yyyy", http.StatusBadRequest)
+		return
+	}
+
+	// Hitung neptu untuk pria dan wanita
+	hariPria := tanggalPria.Weekday().String()
+	pasaranPria := GetPasaran(tanggalPria)
+	neptuPria := hitungNeptu(hariPria, pasaranPria)
+
+	hariWanita := tanggalWanita.Weekday().String()
+	pasaranWanita := GetPasaran(tanggalWanita)
+	neptuWanita := hitungNeptu(hariWanita, pasaranWanita)
+
+	// Tentukan kecocokan jodoh
+	hasilJodoh := coupleMatchResult(neptuPria, neptuWanita)
+
+	// Response JSON
+	response := map[string]interface{}{
+		"data": map[string]string{
+			"hasil": hasilJodoh,
+		},
+		"metadata": map[string]string{},
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	// Define the route handler
 	http.HandleFunc("/api/weton/", GetWetonHandler)
+	http.HandleFunc("/api/weton-jodoh", GetWetonJodohHandler)
 
 	// Start the server on port 8080
-	fmt.Println("Server is running on port 8080...")
+	fmt.Println("Server is running on port 7723...")
 	http.ListenAndServe(":7723", nil)
 }
