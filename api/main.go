@@ -18,6 +18,24 @@ var indonesianWeekdays = map[string]string{
 	"Saturday":  "Sabtu",
 }
 
+var neptuHari = map[string]int{
+	"Minggu": 5,
+	"Senin":  4,
+	"Selasa": 3,
+	"Rabu":   7,
+	"Kamis":  8,
+	"Jumat":  6,
+	"Sabtu":  9,
+}
+
+var neptuPasaran = map[string]int{
+	"Legi":   5,
+	"Pahing": 9,
+	"Pon":    7,
+	"Wage":   4,
+	"Kliwon": 8,
+}
+
 var pasaran = []string{"Legi", "Pahing", "Pon", "Wage", "Kliwon"}
 
 // GetPasaran calculates the Javanese "pasaran" day for a given Gregorian date.
@@ -91,5 +109,5 @@ func main() {
 
 	// Start the server on port 8080
 	fmt.Println("Server is running on port 8080...")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":7723", nil)
 }

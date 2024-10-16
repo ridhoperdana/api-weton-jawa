@@ -18,7 +18,7 @@ function searchWeton() {
 
     // Make the AJAX request
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://localhost:8080/api/weton/${formattedDate}`, true);
+    xhr.open("GET", `http://localhost:7723/api/weton/${formattedDate}`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Parse the JSON response
