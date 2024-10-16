@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"net/http"
 	"strings"
 	"time"
@@ -102,8 +103,59 @@ type WetonResponse struct {
 
 // WetonData holds the day and pasaran information
 type WetonData struct {
-	Hari    string `json:"hari"`
-	Pasaran string `json:"pasaran"`
+	Hari      string `json:"hari"`
+	Pekerjaan string `json:"pekerjaan"`
+	Pasaran   string `json:"pasaran"`
+}
+
+var careerMap = map[string][]string{
+	"Legi": {
+		"Guru atau pengajar, karena karakter Legi yang tenang dan bijaksana.",
+		"Konsultan atau penasihat, cocok dengan sifatnya yang penyabar dan perhatian.",
+		"Pelayan publik atau pegawai administrasi, dengan sikapnya yang sopan dan tertata.",
+		"Spiritualis atau pemuka agama, sesuai dengan sifatnya yang religius dan penuh kedamaian.",
+		"Terapis atau psikolog, karena kemampuannya dalam mendengarkan dan memberikan solusi.",
+	},
+	"Pahing": {
+		"Pengusaha atau pemimpin, karena sifatnya yang ambisius dan penuh tekad.",
+		"Atlet atau pelatih, cocok dengan energi dan semangatnya yang tinggi.",
+		"Militer atau polisi, sesuai dengan karakternya yang disiplin dan tangguh.",
+		"Motivator atau pembicara publik, berkat kepercayaan diri dan kekuatan bicaranya.",
+		"Manajer proyek, karena kemampuannya dalam memimpin dan mengorganisir.",
+	},
+	"Pon": {
+		"Akuntan atau auditor, sesuai dengan sifatnya yang teliti dan detail.",
+		"Politikus atau diplomat, cocok dengan kemampuan strategis dan diplomasi Pon.",
+		"Pengembang properti atau arsitek, karena kemampuannya dalam merencanakan dengan matang.",
+		"Konsultan keuangan, karena kemampuan mengatur dan perhitungan yang cermat.",
+		"Analis data atau peneliti, berkat ketajaman berpikirnya.",
+	},
+	"Wage": {
+		"Seniman atau musisi, karena kreativitas tinggi dan sifatnya yang inovatif.",
+		"Penulis atau jurnalis, berkat kemampuannya dalam menuangkan ide-ide baru.",
+		"Desainer grafis, cocok dengan kemampuan artistiknya dalam menciptakan visual.",
+		"Pekerja startup, karena keinginan untuk mencoba hal baru dan berinovasi.",
+		"Penemu atau inovator, sesuai dengan sifatnya yang suka berpikir di luar kotak.",
+	},
+	"Kliwon": {
+		"Psikolog atau konselor, berkat kepekaannya terhadap perasaan orang lain.",
+		"Penyembuh atau ahli terapi alternatif, cocok dengan intuisi dan empatinya.",
+		"Guru spiritual atau mentor, karena kecenderungannya pada pengembangan jiwa.",
+		"Perawat atau pekerja sosial, sesuai dengan sifatnya yang penuh perhatian dan welas asih.",
+		"Ahli lingkungan atau konservasionis, karena kedekatannya dengan alam dan keseimbangan.",
+	},
+}
+
+// GetRandomCareer returns a random career suggestion for a given pasaran.
+func GetRandomCareer(pasaran string) string {
+	rand.Seed(time.Now().UnixNano()) // Seed random number generator
+	careers := careerMap[pasaran]
+
+	if len(careers) == 0 {
+		return "Tidak ada informasi tersedia."
+	}
+
+	return careers[rand.Intn(len(careers))]
 }
 
 // SetCORS adds CORS headers to the response
@@ -138,8 +190,9 @@ func GetWetonHandler(w http.ResponseWriter, r *http.Request) {
 	// Create the response
 	response := WetonResponse{
 		Data: WetonData{
-			Hari:    gregorianDay,
-			Pasaran: pasaranDay,
+			Hari:      gregorianDay,
+			Pekerjaan: GetRandomCareer(pasaranDay),
+			Pasaran:   pasaranDay,
 		},
 	}
 

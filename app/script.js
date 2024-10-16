@@ -43,9 +43,14 @@ function searchWeton() {
 
             // Display the result
             document.getElementById('result').innerHTML = `
-        <p>Hari: <strong>${response.data.hari}</strong></p>
-        <p>Pasaran: <strong>${response.data.pasaran}</strong></p>
-      `;
+                <p>Hari: <strong>${response.data.hari}</strong></p>
+                <p>Pasaran: <strong>${response.data.pasaran}</strong></p>
+              `;
+
+            // Display the result
+            document.getElementById('result-career').innerHTML = `
+                <p>Pekerjaan yang cocok: <strong>${response.data.pekerjaan}</strong></p>
+              `;
         } else if (xhr.readyState == 4 && xhr.status != 200) {
             document.getElementById('result').innerHTML = "<p class='error'>Terjadi kesalahan saat mencari weton. Coba lagi nanti.</p>";
         }
