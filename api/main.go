@@ -73,7 +73,7 @@ func coupleMatchResult(neptu1, neptu2 int) string {
 		}
 	}
 
-	return fmt.Sprintf("Mendekati: %s", neptuCategory[nearestNeptu])
+	return neptuCategory[nearestNeptu]
 }
 
 // Fungsi untuk menghitung selisih absolut (abs)
