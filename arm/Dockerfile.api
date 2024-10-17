@@ -1,0 +1,35 @@
+# Dockerfile for the Go API server
+FROM arm64v8/golang:1.23.2-alpine3.20 as builder
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the go.mod and go.sum files
+# COPY go.mod go.sum ./
+
+# Download dependencies
+# RUN go mod download
+
+# Copy the source code
+COPY ./api .
+
+# Download dependencies
+RUN go mod download
+
+# Build the Go app
+RUN go build -o api-weton-jawa
+
+# Final stage
+FROM arm64v8/alpine:latest
+
+# Set the working directory
+WORKDIR /root/
+
+# Copy the built binary from the builder stage
+COPY --from=builder /app/api-weton-jawa .
+
+# Expose port 8080 for the API
+EXPOSE 7723
+
+# Run the API server
+CMD ["./api-weton-jawa"]

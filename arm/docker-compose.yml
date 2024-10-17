@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./../
+      dockerfile: Dockerfile.api  # This is the Dockerfile for the Go API
+    container_name: api-weton-jawa
+    ports:
+      - "7723:7723"
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: ./../
+      dockerfile: Dockerfile.nginx  # This is the Dockerfile for the Nginx server
+    container_name: web-weton-jawa
+    ports:
+      - "80:80"
+    env_file: "../.env"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
