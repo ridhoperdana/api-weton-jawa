@@ -37,7 +37,7 @@ function searchWeton() {
 
     // Make the AJAX request
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `${apiHost}:7723/api/weton/${formattedDate}`, true);
+    xhr.open("GET", `${apiHost}/api/weton/${formattedDate}`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Parse the JSON response
@@ -84,7 +84,7 @@ function checkMatchValue() {
 
     // Make the AJAX request
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `${apiHost}:7723/api/jodoh?pria=${formattedDatePria}&wanita=${formattedDateWanita}`, true);
+    xhr.open("GET", `${apiHost}/api/jodoh?pria=${formattedDatePria}&wanita=${formattedDateWanita}`, true);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             // Parse the JSON response

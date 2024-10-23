@@ -262,5 +262,5 @@ func main() {
 
 	// Start the server on port 8080
 	fmt.Println("Server is running on port 7723...")
-	http.ListenAndServe(":7723", nil)
+	http.ListenAndServe(":7731", nil)
 }

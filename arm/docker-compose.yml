@@ -7,7 +7,7 @@ services:
       dockerfile: ./arm/Dockerfile.api  # This is the Dockerfile for the Go API
     container_name: api-weton-jawa
     ports:
-      - "7723:7723"
+      - "7731:7731"
     networks:
       - app-network
 
@@ -17,7 +17,7 @@ services:
       dockerfile: ./arm/Dockerfile.nginx  # This is the Dockerfile for the Nginx server
     container_name: web-weton-jawa
     ports:
-      - "80:80"
+      - "7732:80"
     env_file: "../.env"
     networks:
       - app-network
